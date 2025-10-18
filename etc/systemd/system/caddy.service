@@ -1,0 +1,13 @@
+[Unit]
+Description=Caddy web server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/caddy run --environ --config /etc/caddy/Caddyfile
+ExecReload=/usr/bin/caddy reload --config /etc/caddy/Caddyfile --force
+Restart=on-failure
+User=root
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=multi-user.target

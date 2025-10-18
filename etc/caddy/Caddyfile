@@ -1,0 +1,31 @@
+mstdam.duckdns.org {
+	encode gzip
+
+	# sqlite_web
+	handle /browse* {
+		reverse_proxy 127.0.0.1:81
+	}
+
+	# any CGI requests from multi_sql.html
+	handle /cgi-bin/* {
+		reverse_proxy 127.0.0.1:82
+	}
+
+	# /manage → show /db/multi_sql.html
+	handle /manage {
+		root * /db
+		file_server
+		try_files /multi_sql.html
+	}
+
+	# Default: serve /db static files
+	handle {
+		root * /db
+		file_server browse
+	}
+
+	log {
+		output file /var/log/caddy/mstdam_access.log
+		level INFO
+	}
+}
