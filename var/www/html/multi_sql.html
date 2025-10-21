@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Multi SQL Executor</title>
+
+<style>
+body { font-family: sans-serif; max-width: 700px; margin: 40px auto; background: #f8f9fa; }
+fieldset { margin-bottom: 20px; border: 2px solid #0aa; border-radius: 10px; padding: 20px; background: #fff; }
+legend { font-weight: bold; color: #0aa; }
+button { background: #0aa; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; }
+button:hover { background: #088; }
+textarea { width: 100%; height: 180px; font-family: monospace; }
+input[type="text"], input[type="file"] { width: 100%; padding: 8px; }
+</style>  
+</head>
+<body>
+  
+  <h2>🧾 Multi-SQL Executor</h2>
+<!-- Form 1: Execute SQL from URL -->
+  <form action="/cgi-bin/multi_sql.py" method="post">
+  <fieldset>
+    <legend>Form 1: Execute SQL from URL</legend>
+    <label>SQL File URL:</label><br>
+    <input type="text" name="sql_url" placeholder="https://example.com/file.sql" value="https://raw.githubusercontent.com/hani86400/sqlite_web_client/refs/heads/main/e.sql" size="50">    
+    <button type="submit">Execute from URL</button>
+  </fieldset>
+</form>
+
+  <hr>
+
+
+
+<!-- Form 2: Execute SQL from uploaded file -->
+<form action="/cgi-bin/multi_sql.py" method="post" enctype="multipart/form-data">
+  <fieldset>
+    <legend>Form 2: Execute SQL from File</legend>
+    <label>Select SQL File:</label><br>
+    <input type="file" name="sql_file" accept=".sql" required><br><br>
+    <button type="submit">Execute Uploaded File</button>
+  </fieldset>
+</form>
+
+  <hr>
+
+  <!-- Form 3: Paste SQL directly -->
+  <form action="/cgi-bin/multi_sql.py" method="post">
+    <h3>Form 3: Execute SQL from Text</h3>
+    <input type="hidden" name="action" value="sql_text">
+    <textarea name="sql_text" rows="10" cols="80" placeholder="Paste your SQL here...">ddd</textarea><br>
+    <button type="submit">Run SQL</button>
+  </form>
+</body>
+</html>
