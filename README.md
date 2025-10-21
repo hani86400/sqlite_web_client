@@ -6,12 +6,24 @@ SQLITE_WEB_CLIENT
 Sun Oct 18 11:49:25 PM +03 2025
 
 ```bash
-cd html
 
-wget https://github.com/hani86400/sqlite_web_client/archive/refs/heads/main.zip
 
-unzip main.zip # -> html/sqlite_web_client-main
+mkdir -pv /opt /www
+cd /opt && wget https://github.com/hani86400/sqlite_web_client/archive/refs/heads/main.zip
+export FILES='/opt/sqlite_web_client-main' 
+rm -rf "${FILES}" ; cd /opt && unzip main.zip
+mv "${FILES}/etc/caddy" /etc # OK
+mv "${FILES}/html"      /www #OK
+mv "${FILES}/etc/systemd/system/"*.service /etc/systemd/system/ # OK find /etc/systemd/system | grep 'caddy\|python_cgi\|sqlite_web'
 
+
+mkdir -p /etc/caddy /var/lib/caddy /var/log/caddy
+useradd --system --user-group --home-dir /var/lib/caddy --shell /usr/sbin/nologin caddy
+chown -R caddy:caddy /etc/caddy /var/lib/caddy /var/log/caddy
+
+rm -rf ${FILES}" /www/*
+
+ls -l /etc/caddy /var/lib/caddy /var/log/caddy /www /html  /etc/systemd/system/*.service
 
 #clear ; LC_ALL=C tree sqlite_web_client-main/
 sqlite_web_client-main/
