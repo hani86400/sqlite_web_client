@@ -3,12 +3,12 @@ mstdam.duckdns.org {
 
 	# sqlite_web
 	handle /browse* {
-		reverse_proxy 127.0.0.1:81
+		reverse_proxy 127.0.0.1:8081
 	}
 
 	# any CGI requests from multi_sql.html
 	handle /cgi-bin/* {
-		reverse_proxy 127.0.0.1:82
+		reverse_proxy 127.0.0.1:8082
 	}
 
 	# /manage → show /var/www/html/multi_sql.html

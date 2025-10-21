@@ -8,16 +8,17 @@ Sun Oct 18 11:49:25 PM +03 2025
 ```bash
 
 
-mkdir -pv /opt /var/www
+mkdir -pv /opt /var/lib/caddy /var/log/caddy /var/www
+ls -ld    /opt /var/lib/caddy /var/log/caddy /var/www/html /etc/caddy 
 cd /opt && wget https://github.com/hani86400/sqlite_web_client/archive/refs/heads/main.zip
 export FILES='/opt/sqlite_web_client-main' 
-rm -rf "${FILES}" ; cd /opt && unzip main.zip
-mv "${FILES}/etc/caddy" /etc # OK
-mv "${FILES}/var/www/html"      /var/www #OK
+rm -rf "${FILES}"    ; cd /opt && unzip main.zip
+rm -rf /etc/caddy    ; mv "${FILES}/etc/caddy"    /etc     # OK
+rm -rf /var/www/html ; mv "${FILES}/var/www/html" /var/www # OK
 mv "${FILES}/etc/systemd/system/"*.service /etc/systemd/system/ # OK find /etc/systemd/system | grep 'caddy\|python_cgi\|sqlite_web'
 
 
-mkdir -p /etc/caddy /var/lib/caddy /var/log/caddy
+
 useradd --system --user-group --home-dir /var/lib/caddy --shell /usr/sbin/nologin caddy
 touch     /var/log/caddy/access.log
 chmod 644 /var/log/caddy/access.log
@@ -29,13 +30,24 @@ chown -R webuser:webuser /var/www/html
 chmod -R 750 /var/www/html
 
 
+systemctl daemon-reload 
+
+systemctl start  sqlite_web 
+systemctl status sqlite_web --no-pager 
+journalctl -u webuser --no-pager | tail -n 40
+cat /etc/systemd/system/sqlite_web.service
+PNO='8081' ; ss -tuln | grep "${PNO}" ; lsof -i :${PNO}
+ss -tuln | grep 8081 ; lsof -i :8081
+
+PNO='1433' ; ss -tuln | grep "${PNO}" ; lsof -i :${PNO}
 
 
 ### --- ### --- ###
 curl -v http://127.0.0.1:82/cgi-bin/multi_sql.py
 rm -rf ${FILES}" /www/*
 
-ls -l /etc/caddy /var/lib/caddy /var/log/caddy /www /html  /etc/systemd/system/*.service
+ls -l /etc/caddy /var/lib/caddy /var/log/caddy /var/www/html  
+/etc/systemd/system/*.service
 
 nohup sqlite_web -H 0.0.0.0 -p 84 /path/to/your.db > /var/log/sqlite_web.log 2>&1 &
       sqlite_web mydb.sqlite --host 0.0.0.0 --port 443 --ssl

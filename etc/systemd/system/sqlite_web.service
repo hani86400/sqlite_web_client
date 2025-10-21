@@ -1,13 +1,14 @@
 [Unit]
-Description=sqlite_web service (curl http://127.0.0.1:81/browse/)
+Description=sqlite_web service (curl http://127.0.0.1:8081/browse/)
 After=network.target
 
 [Service]
 User=webuser
-WorkingDirectory=/www/html/db
-ExecStart=/usr/local/bin/sqlite_web /www/html/db/sample.sqlite3 --host 127.0.0.1 --port 81 --url-prefix /browse
+WorkingDirectory=/var/www/html/db
+ExecStart=/usr/local/bin/sqlite_web /var/www/html/db/sample.sqlite3 --host 127.0.0.1 --port 8081 --url-prefix /browse
 Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
+
 
