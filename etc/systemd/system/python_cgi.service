@@ -3,7 +3,7 @@ Description=Python CGI HTTP server
 After=network.target
 
 [Service]
-User=root
+User=webuser
 WorkingDirectory=/www/html
 ExecStart=/usr/bin/python3 -m http.server 82 --bind 127.0.0.1 --cgi
 Restart=on-failure

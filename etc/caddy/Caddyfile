@@ -11,16 +11,16 @@ mstdam.duckdns.org {
 		reverse_proxy 127.0.0.1:82
 	}
 
-	# /manage → show /www/html/multi_sql.html
+	# /manage → show /var/www/html/multi_sql.html
 	handle /manage {
-		root * /www/html
+		root * /var/www/html
 		file_server
 		try_files /multi_sql.html
 	}
 
-	# Default: serve /www/html static files
+	# Default: serve /var/www/html static files
 	handle {
-		root * /www/html
+		root * /var/www/html
 		file_server browse
 	}
 

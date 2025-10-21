@@ -8,22 +8,70 @@ Sun Oct 18 11:49:25 PM +03 2025
 ```bash
 
 
-mkdir -pv /opt /www
+mkdir -pv /opt /var/www
 cd /opt && wget https://github.com/hani86400/sqlite_web_client/archive/refs/heads/main.zip
 export FILES='/opt/sqlite_web_client-main' 
 rm -rf "${FILES}" ; cd /opt && unzip main.zip
 mv "${FILES}/etc/caddy" /etc # OK
-mv "${FILES}/html"      /www #OK
+mv "${FILES}/var/www/html"      /var/www #OK
 mv "${FILES}/etc/systemd/system/"*.service /etc/systemd/system/ # OK find /etc/systemd/system | grep 'caddy\|python_cgi\|sqlite_web'
 
 
 mkdir -p /etc/caddy /var/lib/caddy /var/log/caddy
 useradd --system --user-group --home-dir /var/lib/caddy --shell /usr/sbin/nologin caddy
+touch     /var/log/caddy/access.log
+chmod 644 /var/log/caddy/access.log
 chown -R caddy:caddy /etc/caddy /var/lib/caddy /var/log/caddy
 
+
+useradd -r -U -m -d /var/www/html -s /usr/sbin/nologin webuser
+chown -R webuser:webuser /var/www/html
+chmod -R 750 /var/www/html
+
+
+
+
+### --- ### --- ###
+curl -v http://127.0.0.1:82/cgi-bin/multi_sql.py
 rm -rf ${FILES}" /www/*
 
 ls -l /etc/caddy /var/lib/caddy /var/log/caddy /www /html  /etc/systemd/system/*.service
+
+nohup sqlite_web -H 0.0.0.0 -p 84 /path/to/your.db > /var/log/sqlite_web.log 2>&1 &
+      sqlite_web mydb.sqlite --host 0.0.0.0 --port 443 --ssl
+sudo chown youruser:www-data /db/sample.sqlite3
+sudo chmod 664 /db/sample.sqlite3
+sudo systemctl daemon-reload
+sudo systemctl enable sqlite_web
+sudo systemctl start sqlite_web
+sudo chown $(whoami) $(whoami) /db/sample.sqlite3
+
+
+caddy version
+sudo journalctl -u caddy -n 50
+sudo journalctl -u caddy --no-pager | tail -n 40
+sudo chmod +x /usr/local/bin/caddy
+sudo chmod 755 /etc/caddy
+# Remove old Caddy if exists
+sudo rm -f /usr/bin/caddy /usr/local/bin/caddy || true
+sudo touch /var/log/caddy/access.log
+sudo chmod 644 /var/log/caddy/access.log
+sudo caddy fmt --overwrite /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+
+sudo systemctl start sqlite_web.service
+sudo systemctl start python_cgi.service
+
+sudo useradd -r -s /bin/false webuser
+sudo chown -R webuser:webuser /db
+sudo chmod -R 770 /db
+
+
+
+
+
+
+
 
 #clear ; LC_ALL=C tree sqlite_web_client-main/
 sqlite_web_client-main/
