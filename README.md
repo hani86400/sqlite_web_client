@@ -6,10 +6,18 @@ SQLITE_WEB_CLIENT
 Sun Oct 18 11:49:25 PM +03 2025
 
 ```bash
+ls -ld    /opt /var/lib/caddy /var/log/caddy /var/www/html /etc/caddy 
+clear ; for PNO in {8081..8082} ; do echo -e "\n\nPORT=${PNO}" ;ss -tuln | grep "${PNO}" ; lsof -i :${PNO}; done
+
+systemctl status python_cgi.service --no-pager
+systemctl status sqlite_web.service --no-pager
+systemctl status caddy.service      --no-pager
+
+
 
 
 mkdir -pv /opt /var/lib/caddy /var/log/caddy /var/www
-ls -ld    /opt /var/lib/caddy /var/log/caddy /var/www/html /etc/caddy 
+
 cd /opt && wget https://github.com/hani86400/sqlite_web_client/archive/refs/heads/main.zip
 export FILES='/opt/sqlite_web_client-main' 
 rm -rf "${FILES}"    ; cd /opt && unzip main.zip
@@ -25,9 +33,7 @@ chmod 644 /var/log/caddy/access.log
 chown -R caddy:caddy /etc/caddy /var/lib/caddy /var/log/caddy
 
 
-useradd -r -U -m -d /var/www/html -s /usr/sbin/nologin webuser
-chown -R webuser:webuser /var/www/html
-chmod -R 750 /var/www/html
+
 
 
 systemctl daemon-reload 
@@ -39,6 +45,9 @@ cat /etc/systemd/system/sqlite_web.service
 PNO='8081' ; ss -tuln | grep "${PNO}" ; lsof -i :${PNO}
 ss -tuln | grep 8081 ; lsof -i :8081
 
+
+systemctl start  python_cgi.service 
+systemctl status python_cgi.service --no-pager 
 PNO='1433' ; ss -tuln | grep "${PNO}" ; lsof -i :${PNO}
 
 

@@ -22,7 +22,7 @@ input[type="text"], input[type="file"] { width: 100%; padding: 8px; }
   <fieldset>
     <legend>Form 1: Execute SQL from URL</legend>
     <label>SQL File URL:</label><br>
-    <input type="text" name="sql_url" placeholder="https://example.com/file.sql" value="https://raw.githubusercontent.com/hani86400/sqlite_web_client/refs/heads/main/e.sql" size="50">    
+    <input type="text" name="sql_url" placeholder="https://example.com/file.sql" value="https://raw.githubusercontent.com/hani86400/sqlite_web_client/refs/heads/main/var/www/html/db/m.sql" size="50">    
     <button type="submit">Execute from URL</button>
   </fieldset>
 </form>
@@ -47,7 +47,22 @@ input[type="text"], input[type="file"] { width: 100%; padding: 8px; }
   <form action="/cgi-bin/multi_sql.py" method="post">
     <h3>Form 3: Execute SQL from Text</h3>
     <input type="hidden" name="action" value="sql_text">
-    <textarea name="sql_text" rows="10" cols="80" placeholder="Paste your SQL here...">ddd</textarea><br>
+    <textarea name="sql_text" rows="10" cols="80" placeholder="Paste your SQL here...">PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+
+DROP   TABLE IF     EXISTS K;
+CREATE TABLE IF NOT EXISTS K(
+    KEY INTEGER  NOT NULL,
+    VAL INTEGER
+);
+
+INSERT INTO K VALUES(1,77);
+INSERT INTO K VALUES(2,4);
+INSERT INTO K VALUES(3,2);
+INSERT INTO K VALUES(4,293);
+INSERT INTO K VALUES(5,223);
+
+COMMIT;</textarea><br>
     <button type="submit">Run SQL</button>
   </form>
 </body>

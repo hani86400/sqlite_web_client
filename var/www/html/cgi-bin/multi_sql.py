@@ -2,7 +2,7 @@
 import cgi, cgitb, sqlite3, os, sys, urllib.request
 cgitb.enable()
 
-DB_PATH = "/db/sample.sqlite3"  # <-- Change to your DB path
+DB_PATH = "/var/www/html/db/sample.sqlite3"  # <-- Change to your DB path
 
 print("Content-Type: text/html; charset=utf-8")
 print()
