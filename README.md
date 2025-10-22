@@ -12,9 +12,14 @@ clear ; for PNO in {8081..8082} ; do echo -e "\n\nPORT=${PNO}" ;ss -tuln | grep 
 systemctl status python_cgi.service --no-pager
 systemctl status sqlite_web.service --no-pager
 
-systemctl status caddy.service      --no-pager
+systemctl status caddy.service      --no-pager -l
+journalctl -u caddy -n 40 --no-pager
+ss -tuln | grep -E ':80|:443'
+cat /etc/systemd/system/caddy.service
 ls -lR /var/lib/caddy/.local/share/caddy/certificates/
-
+dig +short mstdam.duckdns.org
+curl -v http://mstdam.duckdns.org/.well-known/acme-challenge/test
+sudo setcap 'cap_net_bind_service=+ep' /usr/bin/caddy
 
 
 mkdir -pv /opt /var/lib/caddy /var/log/caddy /var/www

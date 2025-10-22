@@ -1,3 +1,12 @@
+# Automatically handle ACME HTTP challenges
+
+http://mstdam.duckdns.org {
+	respond "Redirecting to HTTPS..." 308 {
+		close
+	}
+}
+
+
 mstdam.duckdns.org {
 	encode gzip
 
@@ -24,6 +33,7 @@ mstdam.duckdns.org {
 		file_server browse
 	}
 
+	# Access log
 	log {
 		output file /var/log/caddy/mstdam_access.log
 		level INFO
