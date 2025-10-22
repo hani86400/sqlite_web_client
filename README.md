@@ -11,8 +11,9 @@ clear ; for PNO in {8081..8082} ; do echo -e "\n\nPORT=${PNO}" ;ss -tuln | grep 
 
 systemctl status python_cgi.service --no-pager
 systemctl status sqlite_web.service --no-pager
-systemctl status caddy.service      --no-pager
 
+systemctl status caddy.service      --no-pager
+ls -lR /var/lib/caddy/.local/share/caddy/certificates/
 
 
 
