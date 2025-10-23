@@ -2,15 +2,16 @@
 	auto_https disable_redirects
 }
 
-http://mstdam.duckdns.org {
-	handle /.well-known/acme-challenge/* {
+http://redsea.duckdns.org {
+	@acme_challenge path /.well-known/acme-challenge/*
+	handle @acme_challenge {
 		root * /var/www/html
 		file_server
 	}
 	redir https://{host}{uri}
 }
 
-mstdam.duckdns.org {
+redsea.duckdns.org {
 	encode gzip
 
 	handle /browse* {
@@ -21,10 +22,10 @@ mstdam.duckdns.org {
 		reverse_proxy 127.0.0.1:8082
 	}
 
-	handle /manage {
+	handle /manage* {
 		root * /var/www/html
+		try_files {path} /multi_sql.html
 		file_server
-		try_files /multi_sql.html
 	}
 
 	handle {
@@ -33,7 +34,7 @@ mstdam.duckdns.org {
 	}
 
 	log {
-		output file /var/log/caddy/access.log
+		output file /var/log/caddy/redsea_access.log
 		level INFO
 	}
 }

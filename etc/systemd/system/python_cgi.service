@@ -3,10 +3,15 @@ Description=Python CGI HTTP server
 After=network.target
 
 [Service]
+Type=exec
+
 User=webuser
+Group=webuser
+
 WorkingDirectory=/var/www/html
 ExecStart=/usr/bin/python3 -m http.server 8082 --bind 127.0.0.1 --cgi
 Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
+

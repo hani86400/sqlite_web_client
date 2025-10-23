@@ -12,7 +12,7 @@ clear ; for PNO in {8081..8082} ; do echo -e "\n\nPORT=${PNO}" ;ss -tuln | grep 
 systemctl status python_cgi.service --no-pager
 systemctl status sqlite_web.service --no-pager
 
-systemctl status caddy.service      --no-pager -l
+systemctl status caddy_abeer.service      --no-pager -l
 journalctl -u caddy -n 40 --no-pager
 ss -tuln | grep -E ':80|:443'
 cat /etc/systemd/system/caddy.service
@@ -25,6 +25,11 @@ caddy validate --config /etc/caddy/Caddyfile
 mkdir -pv /opt /var/lib/caddy /var/log/caddy /var/www
 systemctl stop caddy;rm -rf /var/lib/caddy/.local/share/caddy/acme/ ; systemctl restart caddy ; journalctl -fu caddy | grep -Ei 'acme|obtain|certificate'
 curl -vk https://mstdam.duckdns.org
+   40  FN='/etc/systemd/system/caddy_abeer.service' ; echo '' >$FN ; nano $FN
+   41  caddy validate --config /etc/caddy/Caddyfile.abeer 
+   42  run     --adapter caddyfile --config /etc/caddy/Caddyfile.abeer
+
+
 
 
 cd /opt && wget https://github.com/hani86400/sqlite_web_client/archive/refs/heads/main.zip
