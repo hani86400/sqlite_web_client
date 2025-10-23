@@ -33,7 +33,7 @@ mstdam.duckdns.org {
 	}
 
 	log {
-		output file /var/log/caddy/mstdam_access.log
+		output file /var/log/caddy/access.log
 		level INFO
 	}
 }

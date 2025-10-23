@@ -1,0 +1,20 @@
+[Unit]
+Description=Caddy web server (redsea)
+After=network.target
+
+[Service]
+User=caddy
+Group=caddy
+ExecStart=/usr/bin/caddy run --environ --config /etc/caddy/caddy_redsea
+ExecReload=/usr/bin/caddy reload       --config /etc/caddy/caddy_redsea --force
+Restart=on-failure
+LimitNOFILE=1048576
+
+# Optional log files (if you want dedicated files)
+StandardOutput=append:/var/log/caddy/output.log
+StandardError=append:/var/log/caddy/error.log
+
+
+[Install]
+WantedBy=multi-user.target
+

@@ -19,10 +19,13 @@ cat /etc/systemd/system/caddy.service
 ls -lR /var/lib/caddy/.local/share/caddy/certificates/
 dig +short mstdam.duckdns.org
 curl -v http://mstdam.duckdns.org/.well-known/acme-challenge/test
-sudo setcap 'cap_net_bind_service=+ep' /usr/bin/caddy
-
-
+setcap 'cap_net_bind_service=+ep' /usr/bin/caddy
+caddy fmt --overwrite  /etc/caddy/Caddyfile
+caddy validate --config /etc/caddy/Caddyfile
 mkdir -pv /opt /var/lib/caddy /var/log/caddy /var/www
+systemctl stop caddy;rm -rf /var/lib/caddy/.local/share/caddy/acme/ ; systemctl restart caddy ; journalctl -fu caddy | grep -Ei 'acme|obtain|certificate'
+curl -vk https://mstdam.duckdns.org
+
 
 cd /opt && wget https://github.com/hani86400/sqlite_web_client/archive/refs/heads/main.zip
 export FILES='/opt/sqlite_web_client-main' 

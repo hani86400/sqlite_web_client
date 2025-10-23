@@ -2,7 +2,7 @@
 	auto_https disable_redirects
 }
 
-http://mstdam.duckdns.org {
+http://redsea.duckdns.org {
 	handle /.well-known/acme-challenge/* {
 		root * /var/www/html
 		file_server
@@ -10,7 +10,7 @@ http://mstdam.duckdns.org {
 	redir https://{host}{uri}
 }
 
-mstdam.duckdns.org {
+redsea.duckdns.org {
 	encode gzip
 
 	handle /browse* {
@@ -33,7 +33,7 @@ mstdam.duckdns.org {
 	}
 
 	log {
-		output file /var/log/caddy/mstdam_access.log
+		output file /var/log/caddy/access.log
 		level INFO
 	}
 }
