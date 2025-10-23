@@ -6,15 +6,19 @@ SQLITE_WEB_CLIENT
 Sun Oct 18 11:49:25 PM +03 2025
 
 ```bash
+ss -tuln | grep -E ':80|:443'
+dig redsea.duckdns.org
+curl -v http://redsea.duckdns.org/.well-known/acme-challenge/test
+
 ls -ld    /opt /var/lib/caddy /var/log/caddy /var/www/html /etc/caddy 
 clear ; for PNO in {8081..8082} ; do echo -e "\n\nPORT=${PNO}" ;ss -tuln | grep "${PNO}" ; lsof -i :${PNO}; done
 
 systemctl status python_cgi.service --no-pager
 systemctl status sqlite_web.service --no-pager
 
-systemctl status caddy_abeer.service      --no-pager -l
+systemctl status caddy_redsea.service      --no-pager -l
 journalctl -u caddy -n 40 --no-pager
-ss -tuln | grep -E ':80|:443'
+
 cat /etc/systemd/system/caddy.service
 ls -lR /var/lib/caddy/.local/share/caddy/certificates/
 dig +short mstdam.duckdns.org
