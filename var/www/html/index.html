@@ -32,8 +32,40 @@
     background-color: #006edc;
   }
 </style>
+<script>
+
+    // Generate random color
+    function randomColor() {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // Update time every second
+    function updateTime() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mi = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById("clock").textContent = `${yyyy}_${mm}_${dd}_${hh}_${mi}_${ss}`;
+    }
+
+    // Run on load
+    window.onload = function() {
+      document.body.style.backgroundColor = randomColor();
+      updateTime();
+      //setInterval(updateTime, 1000);
+    };
+
+</script>
 </head>
 <body>
+  <h1>Current Time</h1>
+  <p id="clock"></p>
   <h1>🔗 Multi SQL Dashboard</h1>
   <h3>I am (index.html)</h3>
   <a id="https://mstdam.duckdns.org/browse" href="/browse" target="_blank">/browse (Browse Database)</a>

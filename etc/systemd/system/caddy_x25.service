@@ -1,0 +1,24 @@
+[Unit]
+Description=Caddy web server for  ( x25.shop )
+After=network.target
+
+[Service]
+Type=exec
+
+User=caddy
+Group=caddy
+Environment=XDG_DATA_HOME=/var/lib/caddy/.local/share
+Environment=XDG_CONFIG_HOME=/etc/caddy
+ExecStart=/usr/bin/caddy run     --adapter caddyfile --config /etc/caddy/Caddyfile.x25
+ExecReload=/usr/bin/caddy reload --adapter caddyfile --config /etc/caddy/Caddyfile.x25 --force
+TimeoutStopSec=5s
+LimitNOFILE=1048576
+Restart=on-failure
+
+# Optional log files (if you want dedicated files)
+StandardOutput=append:/var/log/caddy/output.log
+StandardError=append:/var/log/caddy/error.log
+
+[Install]
+WantedBy=multi-user.target
+

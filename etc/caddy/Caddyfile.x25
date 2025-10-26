@@ -1,0 +1,41 @@
+{
+	auto_https disable_redirects
+}
+
+http://redsea.duckdns.org {
+	@acme_challenge path /.well-known/acme-challenge/*
+	handle @acme_challenge {
+		root * /var/www/html
+		file_server
+	}
+	redir https://{host}{uri}
+}
+
+redsea.duckdns.org {
+	encode gzip
+
+	handle /browse* {
+		reverse_proxy 127.0.0.1:8081
+	}
+
+	handle /cgi-bin/* {
+		reverse_proxy 127.0.0.1:8082
+	}
+
+	handle /manage* {
+		root * /var/www/html
+		try_files {path} /multi_sql.html
+		file_server
+	}
+
+	handle {
+		root * /var/www/html
+		file_server browse
+	}
+
+	log {
+		output file /var/log/caddy/redsea_access.log
+		level INFO
+	}
+}
+
