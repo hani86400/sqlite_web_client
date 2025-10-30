@@ -1,19 +1,24 @@
 {
+	# Global options block
 	auto_https disable_redirects
 }
 
-http://redsea.duckdns.org {
+# --- HTTP to HTTPS Redirect & ACME Challenge ---
+http://x25.shop {
 	@acme_challenge path /.well-known/acme-challenge/*
 	handle @acme_challenge {
 		root * /var/www/html
 		file_server
 	}
+	# Redirect all HTTP to HTTPS
 	redir https://{host}{uri}
 }
 
-redsea.duckdns.org {
+# --- Primary HTTPS site configuration ---
+x25.shop {
 	encode gzip
 
+	# --- Subpaths reverse proxy setup ---
 	handle /browse* {
 		reverse_proxy 127.0.0.1:8081
 	}
@@ -28,14 +33,18 @@ redsea.duckdns.org {
 		file_server
 	}
 
+	# --- Default static file handler ---
 	handle {
 		root * /var/www/html
 		file_server browse
 	}
 
+	# --- Logging setup ---
 	log {
-		output file /var/log/caddy/redsea_access.log
+		output file /var/log/caddy/x25_access.log
 		level INFO
 	}
 }
+
+
 
