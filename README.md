@@ -7,15 +7,39 @@ Sun Oct 18 11:49:25 PM +03 2025
 
 ```bash
 ss -tuln | grep -E ':80|:443'
+ls -ld    /opt /var/lib/caddy /var/log/caddy /var/www/html /etc/caddy 
+
+
 dig redsea.duckdns.org
 curl -v http://redsea.duckdns.org/.well-known/acme-challenge/test
-systemctl status caddy_redsea.service --no-pager -l
+
+echo -e "export PS1='# '\nexport SYSD_SRV='caddy_x25.service'" >> ~/.bashrc
+
+systemctl status  "${SYSD_SRV}" --no-pager -l
+systemctl start "${SYSD_SRV}" --no-pager -l
+journalctl -u     "${SYSD_SRV}" --no-pager  -n 40
+caddy run --adapter caddyfile --config /etc/caddy/Caddyfile.x25
+
+scp caddy_certs_20251030_140816.tgz s11_host:/tmp/
+sudo mkdir -p /var/lib/caddy/.local/share
+sudo tar xzf /tmp/caddy_certs_20251030_140816.tgz -C /var/lib/caddy/.local/share/
+sudo chown -R caddy:caddy /var/lib/caddy
+ 
+ssh s11_host "sudo tar czf /tmp/caddy_certs_$(date +%Y%m%d_%H%M%S).tgz -C /var/lib/caddy/.local/share caddy && sudo chown $(whoami):$(whoami) /tmp/caddy_certs_*.tgz"
+ssh s11_host "sudo tar czf /tmp/caddy_certs_$(date +%Y%m%d_%H%M%S).tgz -C /root/.local/share/caddy caddy && sudo chown $(whoami):$(whoami) /tmp/caddy_certs_*.tgz"
+
+ ssh s11_host "sudo tar czf /tmp/caddy_certs_$(date +%Y%m%d_%H%M%S).tgz -C /root/.local/share/caddy caddy ; sudo chown $(whoami):$(whoami) /tmp/caddy_certs_*.tgz"
+tar: caddy: Cannot stat: No such file or directory
+tar: Exiting with failure status due to previous errors
+chown: invalid user: ‘hani:hani’
+
+
 journalctl    -u caddy_redsea -n 40   --no-pager
 
 systemctl status caddy_mstdam.service --no-pager -l
 journalctl    -u caddy_mstdam -n 40   --no-pager
 
-ls -ld    /opt /var/lib/caddy /var/log/caddy /var/www/html /etc/caddy 
+
 clear ; for PNO in {8081..8082} ; do echo -e "\n\nPORT=${PNO}" ;ss -tuln | grep "${PNO}" ; lsof -i :${PNO}; done
 
 
